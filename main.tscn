@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://maosoyr4pruq"]
+
+[ext_resource type="Script" uid="uid://di3yn3osrnhlt" path="res://scripts/main.gd" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://cdxk0h205dv0p" path="res://scenes/player.tscn" id="2_0xm2m"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0xm2m"]
+size = Vector3(64, 1, 64)
+
+[sub_resource type="BoxMesh" id="BoxMesh_0xm2m"]
+size = Vector3(64, 1, 64)
+
+[node name="main" type="Node3D" unique_id=353518620]
+script = ExtResource("1_ig7tw")
+player_scene = ExtResource("2_0xm2m")
+
+[node name="m_spawner" type="MultiplayerSpawner" parent="." unique_id=1551097229]
+_spawnable_scenes = PackedStringArray("uid://cdxk0h205dv0p")
+spawn_path = NodePath("..")
+
+[node name="cam" type="Camera3D" parent="." unique_id=995007617]
+transform = Transform3D(1, 0, 0, 0, 0.9659259, 0.25881907, 0, -0.25881907, 0.9659258, 0, 6, 18.09313)
+
+[node name="sun" type="DirectionalLight3D" parent="." unique_id=324549864]
+transform = Transform3D(0.76185495, -0.4340072, 0.48084804, 0, 0.7423385, 0.67002505, -0.6477477, -0.5104619, 0.56555426, 0, 11.049206, 0)
+
+[node name="ground" type="StaticBody3D" parent="." unique_id=1146156176]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="col" type="CollisionShape3D" parent="ground" unique_id=1101970214]
+shape = SubResource("BoxShape3D_0xm2m")
+
+[node name="mesh" type="MeshInstance3D" parent="ground" unique_id=1446826610]
+mesh = SubResource("BoxMesh_0xm2m")
+
+[node name="canvas" type="CanvasLayer" parent="." unique_id=489997812]
+
+[node name="ui" type="Control" parent="canvas" unique_id=1747108768]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="host" type="Button" parent="canvas/ui" unique_id=1926642422]
+layout_mode = 1
+offset_left = 31.0
+offset_top = 30.0
+offset_right = 93.0
+offset_bottom = 69.0
+text = "Host"
+
+[node name="join" type="Button" parent="canvas/ui" unique_id=1830440539]
+layout_mode = 1
+offset_left = 31.0
+offset_top = 78.0
+offset_right = 93.0
+offset_bottom = 117.0
+disabled = true
+text = "Join"
+
+[node name="lobby_id" type="LineEdit" parent="canvas/ui" unique_id=1826724472]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 127.0
+offset_right = 172.0
+offset_bottom = 158.0
+placeholder_text = "Lobby ID"
+
+[connection signal="pressed" from="canvas/ui/host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="canvas/ui/join" to="." method="_on_join_pressed"]
+[connection signal="text_changed" from="canvas/ui/lobby_id" to="." method="_on_lobby_id_text_changed"]
