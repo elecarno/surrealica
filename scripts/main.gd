@@ -8,12 +8,16 @@ var peer: SteamMultiplayerPeer
 var is_host: bool = false
 var is_joining: bool = false
 
+var peer_local = ENetMultiplayerPeer.new()
+
 
 func _ready() -> void:
 	print("Steam initialised: ", Steam.steamInit(480, true))
 	Steam.initRelayNetworkAccess()
 	Steam.lobby_created.connect(_on_lobby_created)
 	Steam.lobby_joined.connect(_on_lobby_joined)
+	Steam.lobby_match_list.connect(_on_lobby_match_list)
+	open_lobby_list()
 
 func host_lobby():
 	Steam.createLobby(Steam.LobbyType.LOBBY_TYPE_PUBLIC, 16)
@@ -22,6 +26,8 @@ func host_lobby():
 func _on_lobby_created(result: int, lobby_id: int):
 	if result == Steam.Result.RESULT_OK:
 		self.lobby_id = lobby_id
+		
+		Steam.setLobbyData(lobby_id, "name", str(Steam.getPersonaName()+"'s Lobby"))
 		
 		peer = SteamMultiplayerPeer.new()
 		peer.server_relay = true
@@ -39,6 +45,7 @@ func join_lobby(lobby_id: int):
 	is_joining = true
 	Steam.joinLobby(lobby_id)
 	
+	
 func _on_lobby_joined(lobby_id: int, permissions: int, locked: bool, reponse: int):
 	if not is_joining:
 		return
@@ -50,6 +57,23 @@ func _on_lobby_joined(lobby_id: int, permissions: int, locked: bool, reponse: in
 	multiplayer.multiplayer_peer = peer
 	
 	is_joining = false
+
+func _on_lobby_match_list(lobbies):
+	for lobby in lobbies:
+		var lobby_name = Steam.getLobbyData(lobby, "name")
+		var member_count = Steam.getNumLobbyMembers(lobby)
+		
+		var button: Button = Button.new()
+		button.set_text(str(lobby_name) + "| Players: " + str(member_count))
+		button.set_size(Vector2(100, 5))
+		button.connect("pressed", Callable(self, "join_lobby").bind(lobby))
+		
+		$canvas/ui/scroll/lobbies.add_child(button)
+
+
+func open_lobby_list():
+	Steam.addRequestLobbyListDistanceFilter(Steam.LOBBY_DISTANCE_FILTER_WORLDWIDE)
+	Steam.requestLobbyList()
 
 		
 func _add_player(id: int = 1):
@@ -64,6 +88,7 @@ func _remove_player(id: int):
 	self.get_node(str(id)).queue_free()
 		
 
+
 func _on_host_pressed() -> void:
 	host_lobby()
 	$canvas.queue_free()
@@ -73,3 +98,23 @@ func _on_lobby_id_text_changed(new_text: String) -> void:
 
 func _on_join_pressed() -> void:
 	join_lobby($canvas/ui/lobby_id.text.to_int())
+	$canvas.queue_free()
+
+func _on_refresh_pressed() -> void:
+	if $canvas/ui/scroll/lobbies.get_child_count() > 0:
+		for n in $canvas/ui/scroll/lobbies.get_children():
+			n.queue_free()
+			
+	open_lobby_list()
+
+
+func _on_host_local_pressed() -> void:
+	peer_local.create_server(6868)
+	multiplayer.multiplayer_peer = peer_local
+	$canvas.queue_free()
+
+
+func _on_join_local_pressed() -> void:
+	peer_local.create_client("127.0.0.1", 6868)
+	multiplayer.multiplayer_peer = peer_local
+	$canvas.queue_free()
