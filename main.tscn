@@ -11,6 +11,7 @@ size = Vector3(64, 1, 64)
 
 [node name="main" type="Node3D" unique_id=353518620]
 script = ExtResource("1_ig7tw")
+net_mode = "ENet"
 player_scene = ExtResource("2_0xm2m")
 
 [node name="m_spawner" type="MultiplayerSpawner" parent="." unique_id=1551097229]
@@ -50,14 +51,6 @@ offset_right = 93.0
 offset_bottom = 69.0
 text = "Host"
 
-[node name="host_local" type="Button" parent="canvas/ui" unique_id=461624672]
-layout_mode = 1
-offset_left = 110.0
-offset_top = 30.0
-offset_right = 172.0
-offset_bottom = 69.0
-text = "Host Local"
-
 [node name="join" type="Button" parent="canvas/ui" unique_id=1830440539]
 layout_mode = 1
 offset_left = 31.0
@@ -66,14 +59,6 @@ offset_right = 93.0
 offset_bottom = 117.0
 disabled = true
 text = "Join"
-
-[node name="join_local" type="Button" parent="canvas/ui" unique_id=183783812]
-layout_mode = 1
-offset_left = 110.0
-offset_top = 78.0
-offset_right = 199.0
-offset_bottom = 117.0
-text = "Join Local"
 
 [node name="refresh" type="Button" parent="canvas/ui" unique_id=682094158]
 layout_mode = 1
@@ -104,8 +89,6 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 
 [connection signal="pressed" from="canvas/ui/host" to="." method="_on_host_pressed"]
-[connection signal="pressed" from="canvas/ui/host_local" to="." method="_on_host_local_pressed"]
 [connection signal="pressed" from="canvas/ui/join" to="." method="_on_join_pressed"]
-[connection signal="pressed" from="canvas/ui/join_local" to="." method="_on_join_local_pressed"]
 [connection signal="pressed" from="canvas/ui/refresh" to="." method="_on_refresh_pressed"]
 [connection signal="text_changed" from="canvas/ui/lobby_id" to="." method="_on_lobby_id_text_changed"]

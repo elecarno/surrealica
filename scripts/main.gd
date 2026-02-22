@@ -1,17 +1,23 @@
 extends Node3D
 
+@export_enum("Steam", "ENet") var net_mode: String = "Steam"
+
 var lobby_id: int = 0
-var peer: SteamMultiplayerPeer
+var peer
 
 @export var player_scene: PackedScene
 
 var is_host: bool = false
 var is_joining: bool = false
 
-var peer_local = ENetMultiplayerPeer.new()
-
 
 func _ready() -> void:
+	if net_mode == "ENet":
+		peer = ENetMultiplayerPeer.new()
+		$canvas/ui/join.disabled = false
+	elif net_mode == "Steam":
+		peer = SteamMultiplayerPeer.new()
+	
 	print("Steam initialised: ", Steam.steamInit(480, true))
 	Steam.initRelayNetworkAccess()
 	Steam.lobby_created.connect(_on_lobby_created)
@@ -20,8 +26,16 @@ func _ready() -> void:
 	open_lobby_list()
 
 func host_lobby():
-	Steam.createLobby(Steam.LobbyType.LOBBY_TYPE_PUBLIC, 16)
 	is_host = true
+	
+	if net_mode == "ENet":
+		peer.create_server(4040)
+		multiplayer.multiplayer_peer = peer
+		multiplayer.peer_connected.connect(_add_player)
+		multiplayer.peer_disconnected.connect(_remove_player)
+		_add_player()
+	elif net_mode == "Steam":
+		Steam.createLobby(Steam.LobbyType.LOBBY_TYPE_PUBLIC, 16)
 
 func _on_lobby_created(result: int, lobby_id: int):
 	if result == Steam.Result.RESULT_OK:
@@ -41,9 +55,15 @@ func _on_lobby_created(result: int, lobby_id: int):
 		print("Lobby created: ", lobby_id)
 		
 		
-func join_lobby(lobby_id: int):
+func join_lobby(lobby_id: int = 0):
 	is_joining = true
-	Steam.joinLobby(lobby_id)
+	
+	if net_mode == "ENet":
+		peer.create_client("127.0.0.1", 4040)
+	elif net_mode == "Steam":
+		Steam.joinLobby(lobby_id)
+		
+	multiplayer.multiplayer_peer = peer
 	
 	
 func _on_lobby_joined(lobby_id: int, permissions: int, locked: bool, reponse: int):
@@ -106,15 +126,3 @@ func _on_refresh_pressed() -> void:
 			n.queue_free()
 			
 	open_lobby_list()
-
-
-func _on_host_local_pressed() -> void:
-	peer_local.create_server(6868)
-	multiplayer.multiplayer_peer = peer_local
-	$canvas.queue_free()
-
-
-func _on_join_local_pressed() -> void:
-	peer_local.create_client("127.0.0.1", 6868)
-	multiplayer.multiplayer_peer = peer_local
-	$canvas.queue_free()
