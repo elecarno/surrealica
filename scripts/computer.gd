@@ -1,4 +1,8 @@
+# the majority of this script has been taken from the godot 3d ui example
 extends Node3D
+
+var can_escape: bool = false
+var player_in_interact: bool = false
 
 # Used for checking if the mouse is inside the Area3D.
 var is_mouse_inside = false
@@ -27,6 +31,23 @@ func _mouse_entered_area():
 
 func _mouse_exited_area():
 	is_mouse_inside = false
+
+
+# control exiting the computer
+func _input(event: InputEvent) -> void:
+	if (event is InputEventKey and event.is_pressed() and not event.is_echo()):
+		if event.keycode == KEY_TAB and can_escape:
+			$viewport/computer_ui.active = false
+			$cam.current = false
+			network.players_container.get_client_player().toggle_control(true)
+			$interact_area/col.set_deferred("disabled", false)
+			
+	if event.is_action_pressed("interact") and player_in_interact:
+		network.players_container.get_client_player().toggle_control(false)
+		$viewport/computer_ui.active = true
+		$viewport/computer_ui/terminal/vbox/cmd.grab_focus()
+		$cam.current = true
+		$interact_area/col.set_deferred("disabled", true)
 
 
 func _unhandled_input(event):
@@ -102,3 +123,17 @@ func _mouse_input_event(_camera: Camera3D, event: InputEvent, event_position: Ve
 
 	# Finally, send the processed input event to the viewport.
 	node_viewport.push_input(event)
+	
+	
+
+
+func _on_interact_area_body_entered(body: Node3D) -> void:
+	if body is Player:
+		if body.name == str(multiplayer.get_unique_id()):
+			player_in_interact = true
+
+
+func _on_interact_area_body_exited(body: Node3D) -> void:
+	if body is Player:
+		if body.name == str(multiplayer.get_unique_id()):
+			player_in_interact = false

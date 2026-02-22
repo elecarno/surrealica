@@ -1,37 +1,39 @@
 class_name Network
 extends Node3D
 
-@export_enum("Steam", "ENet") var net_mode: String = "Steam"
-
+# networking
+var net_mode: String = "ENet"
 var lobby_id: int = 0
 var peer
-
-@export var player_scene: PackedScene
 
 var is_host: bool = false
 var is_joining: bool = false
 
+# references to game world
+@onready var player_scene: PackedScene = preload("res://scenes/player.tscn")
+@onready var players_container: PlayersContainer
 
 @onready var current_lobby_list_vbox: VBoxContainer
 @onready var current_lobby_id_prompt: LineEdit
 
+
 func _ready() -> void:
+	# setup peer based on network mode
 	if net_mode == "ENet":
 		peer = ENetMultiplayerPeer.new()
-		$canvas/ui/join.disabled = false
 	elif net_mode == "Steam":
 		peer = SteamMultiplayerPeer.new()
-	
-	print("Steam initialised: ", Steam.steamInit(480, true))
-	Steam.initRelayNetworkAccess()
-	Steam.lobby_created.connect(_on_lobby_created)
-	Steam.lobby_joined.connect(_on_lobby_joined)
-	Steam.lobby_match_list.connect(_on_lobby_match_list)
-	open_lobby_list()
+		print("Steam initialised: ", Steam.steamInit(480, true))
+		Steam.initRelayNetworkAccess()
+		Steam.lobby_created.connect(_on_lobby_created)
+		Steam.lobby_joined.connect(_on_lobby_joined)
+		Steam.lobby_match_list.connect(_on_lobby_match_list)
+		open_lobby_list()
 
 func host_lobby():
 	is_host = true
 	
+	# create lobby based on network mode
 	if net_mode == "ENet":
 		peer.create_server(4040)
 		multiplayer.multiplayer_peer = peer
@@ -40,6 +42,7 @@ func host_lobby():
 		_add_player()
 	elif net_mode == "Steam":
 		Steam.createLobby(Steam.LobbyType.LOBBY_TYPE_PUBLIC, 16)
+
 
 func _on_lobby_created(result: int, lobby_id: int):
 	if result == Steam.Result.RESULT_OK:
@@ -104,15 +107,15 @@ func open_lobby_list():
 func _add_player(id: int = 1):
 	var player = player_scene.instantiate()
 	player.name = str(id)
-	call_deferred("add_child", player)
+	players_container.add_child(player)
 	
 func _remove_player(id: int):
-	if not self.has_node(str(id)):
+	if not players_container.has_node(str(id)):
 		return
 		
-	self.get_node(str(id)).queue_free()
+	players_container.get_node(str(id)).queue_free()
 	
-
+	
 func _host_pressed() -> void:
 	host_lobby()
 

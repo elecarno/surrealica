@@ -3,6 +3,13 @@
 [ext_resource type="Script" uid="uid://jfw57kms3l21" path="res://scripts/computer_ui.gd" id="1_a82rf"]
 [ext_resource type="Material" uid="uid://bnoqhr7t3khf1" path="res://shaders/crt.tres" id="1_w3x1j"]
 [ext_resource type="Theme" uid="uid://d11ht7lbvxsal" path="res://ui_themes/theme_computer.tres" id="2_25mte"]
+[ext_resource type="Theme" uid="uid://bbjv64wu23cub" path="res://ui_themes/theme_terminal.tres" id="3_mr56c"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_25mte"]
+bg_color = Color(0.060530342, 0.060530365, 0.060530297, 0.101960786)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mr56c"]
+bg_color = Color(0.060530342, 0.060530365, 0.060530297, 0.101960786)
 
 [node name="computer_ui" type="Control" unique_id=742668510]
 layout_mode = 3
@@ -12,9 +19,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -512.0
-offset_top = -512.0
+offset_top = -384.0
 offset_right = 512.0
-offset_bottom = 512.0
+offset_bottom = 384.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
@@ -63,7 +70,7 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -281.0
-offset_top = -290.0
+offset_top = -151.0
 offset_right = 281.0
 offset_bottom = 290.0
 grow_horizontal = 2
@@ -106,6 +113,63 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_25mte")
 text = "Join"
+
+[node name="terminal" type="Control" parent="." unique_id=1617302241]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 43.0
+offset_right = -43.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_mr56c")
+
+[node name="vbox" type="VBoxContainer" parent="terminal" unique_id=2108844230]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -442.0
+offset_top = 26.0
+offset_right = 442.0
+offset_bottom = -26.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_mr56c")
+
+[node name="status" type="Label" parent="terminal/vbox" unique_id=1040622433]
+layout_mode = 2
+size_flags_vertical = 1
+theme = ExtResource("3_mr56c")
+theme_override_font_sizes/font_size = 24
+text = "02:00 | 5 Players Connected"
+vertical_alignment = 2
+
+[node name="cli" type="Label" parent="terminal/vbox" unique_id=1822620627]
+custom_minimum_size = Vector2(800, 0)
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("3_mr56c")
+theme_override_font_sizes/font_size = 22
+text = "Surrealica Terminal v1.0.0
+
+Use \"help\" to see a list of commands. Press [TAB] to exit the computer.
+"
+vertical_alignment = 2
+autowrap_mode = 2
+clip_text = true
+
+[node name="cmd" type="LineEdit" parent="terminal/vbox" unique_id=593860274]
+layout_mode = 2
+theme = ExtResource("3_mr56c")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_25mte")
+theme_override_styles/focus = SubResource("StyleBoxFlat_mr56c")
+placeholder_text = "enter command"
+keep_editing_on_text_submit = true
 
 [node name="crt" type="ColorRect" parent="." unique_id=998295484]
 visible = false

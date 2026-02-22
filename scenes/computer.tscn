@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://hlaijqwl2v13" path="res://scenes/computer_ui.tscn" id="1_om4aa"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_0xm2m"]
+size = Vector2(1.024, 0.768)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_0xm2m"]
 viewport_path = NodePath("viewport")
@@ -13,7 +14,10 @@ resource_local_to_scene = true
 albedo_texture = SubResource("ViewportTexture_0xm2m")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1bvp3"]
-size = Vector3(1, 1, 0.044921875)
+size = Vector3(1.024, 0.768, 0.045)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8pqrt"]
+size = Vector3(1, 2, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_h2yge"]
 
@@ -41,9 +45,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0.5519028)
 shape = SubResource("BoxShape3D_1bvp3")
 
 [node name="viewport" type="SubViewport" parent="." unique_id=1614833374]
-size = Vector2i(1024, 1024)
+size = Vector2i(1024, 768)
 
 [node name="computer_ui" parent="viewport" unique_id=742668510 instance=ExtResource("1_om4aa")]
+
+[node name="interact_area" type="Area3D" parent="." unique_id=1651408466]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="col" type="CollisionShape3D" parent="interact_area" unique_id=1419821769]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_8pqrt")
+disabled = true
 
 [node name="monitor" type="StaticBody3D" parent="." unique_id=610927706]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
@@ -54,3 +66,6 @@ shape = SubResource("BoxShape3D_h2yge")
 [node name="mesh" type="MeshInstance3D" parent="monitor" unique_id=1075727931]
 mesh = SubResource("BoxMesh_h2yge")
 surface_material_override/0 = SubResource("StandardMaterial3D_0xm2m")
+
+[connection signal="body_entered" from="interact_area" to="." method="_on_interact_area_body_entered"]
+[connection signal="body_exited" from="interact_area" to="." method="_on_interact_area_body_exited"]
