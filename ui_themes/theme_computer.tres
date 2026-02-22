@@ -1,0 +1,43 @@
+[gd_resource type="Theme" format=3 uid="uid://d11ht7lbvxsal"]
+
+[ext_resource type="FontFile" uid="uid://e7nbbpaykv0t" path="res://fonts/ubuntu/Ubuntu-R.ttf" id="1_kj188"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kj188"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 4
+border_width_top = 3
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.5211406, 0.52114064, 0.5211403, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t4syf"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 4
+border_width_top = 3
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.8745098, 0.8745098, 0.8745098, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1cr2a"]
+bg_color = Color(0.6, 0.6, 0.6, 0.28235295)
+border_width_left = 4
+border_width_top = 3
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.8745098, 0.8745098, 0.8745098, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3r45d"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 4
+border_width_top = 3
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.8745098, 0.8745098, 0.8745098, 1)
+
+[resource]
+default_font_size = 18
+Button/styles/disabled = SubResource("StyleBoxFlat_kj188")
+Button/styles/focus = SubResource("StyleBoxFlat_t4syf")
+Button/styles/hover = SubResource("StyleBoxFlat_1cr2a")
+Button/styles/normal = SubResource("StyleBoxFlat_3r45d")
+Label/fonts/font = ExtResource("1_kj188")

@@ -1,3 +1,4 @@
+class_name Network
 extends Node3D
 
 @export_enum("Steam", "ENet") var net_mode: String = "Steam"
@@ -10,6 +11,9 @@ var peer
 var is_host: bool = false
 var is_joining: bool = false
 
+
+@onready var current_lobby_list_vbox: VBoxContainer
+@onready var current_lobby_id_prompt: LineEdit
 
 func _ready() -> void:
 	if net_mode == "ENet":
@@ -88,7 +92,8 @@ func _on_lobby_match_list(lobbies):
 		button.set_size(Vector2(100, 5))
 		button.connect("pressed", Callable(self, "join_lobby").bind(lobby))
 		
-		$canvas/ui/scroll/lobbies.add_child(button)
+		if current_lobby_list_vbox != null:
+			current_lobby_list_vbox.add_child(button)
 
 
 func open_lobby_list():
@@ -106,23 +111,17 @@ func _remove_player(id: int):
 		return
 		
 	self.get_node(str(id)).queue_free()
-		
+	
 
-
-func _on_host_pressed() -> void:
+func _host_pressed() -> void:
 	host_lobby()
-	$canvas.queue_free()
 
-func _on_lobby_id_text_changed(new_text: String) -> void:
-	$canvas/ui/join.disabled = (new_text.length() == 0)
+func _join_pressed() -> void:
+	join_lobby(current_lobby_id_prompt.text.to_int())
 
-func _on_join_pressed() -> void:
-	join_lobby($canvas/ui/lobby_id.text.to_int())
-	$canvas.queue_free()
-
-func _on_refresh_pressed() -> void:
-	if $canvas/ui/scroll/lobbies.get_child_count() > 0:
-		for n in $canvas/ui/scroll/lobbies.get_children():
+func _refresh_pressed() -> void:
+	if current_lobby_list_vbox.get_child_count() > 0:
+		for n in current_lobby_list_vbox.get_children():
 			n.queue_free()
 			
 	open_lobby_list()

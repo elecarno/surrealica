@@ -1,0 +1,124 @@
+[gd_scene format=3 uid="uid://hlaijqwl2v13"]
+
+[ext_resource type="Script" uid="uid://jfw57kms3l21" path="res://scripts/computer_ui.gd" id="1_a82rf"]
+[ext_resource type="Material" uid="uid://bnoqhr7t3khf1" path="res://shaders/crt.tres" id="1_w3x1j"]
+[ext_resource type="Theme" uid="uid://d11ht7lbvxsal" path="res://ui_themes/theme_computer.tres" id="2_25mte"]
+
+[node name="computer_ui" type="Control" unique_id=742668510]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -512.0
+offset_top = -512.0
+offset_right = 512.0
+offset_bottom = 512.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_a82rf")
+
+[node name="bg" type="ColorRect" parent="." unique_id=429045479]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.14767182, 0.14767182, 0.14767176, 1)
+
+[node name="network" type="Control" parent="." unique_id=954717976]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="title" type="Label" parent="network" unique_id=1753617810]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -241.5
+offset_top = 153.0
+offset_right = 241.5
+offset_bottom = 208.0
+grow_horizontal = 2
+theme = ExtResource("2_25mte")
+theme_override_font_sizes/font_size = 48
+text = "Surrealica Networking"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="vbox" type="VBoxContainer" parent="network" unique_id=58588153]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -281.0
+offset_top = -290.0
+offset_right = 281.0
+offset_bottom = 290.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="scroll" type="ScrollContainer" parent="network/vbox" unique_id=1805602556]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_25mte")
+
+[node name="lobbies" type="VBoxContainer" parent="network/vbox/scroll" unique_id=1186471290]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme = ExtResource("2_25mte")
+
+[node name="refresh" type="Button" parent="network/vbox" unique_id=76303230]
+layout_mode = 2
+theme = ExtResource("2_25mte")
+text = "Refresh"
+
+[node name="lobby_id" type="LineEdit" parent="network/vbox" unique_id=1369887758]
+layout_mode = 2
+theme = ExtResource("2_25mte")
+placeholder_text = "Lobby ID"
+virtual_keyboard_enabled = false
+
+[node name="hbox" type="HBoxContainer" parent="network/vbox" unique_id=738489723]
+layout_mode = 2
+alignment = 1
+
+[node name="host" type="Button" parent="network/vbox/hbox" unique_id=156224425]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_25mte")
+text = "Host"
+
+[node name="join" type="Button" parent="network/vbox/hbox" unique_id=1003389311]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_25mte")
+text = "Join"
+
+[node name="crt" type="ColorRect" parent="." unique_id=998295484]
+visible = false
+material = ExtResource("1_w3x1j")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[connection signal="pressed" from="network/vbox/refresh" to="." method="_on_refresh_pressed"]
+[connection signal="text_changed" from="network/vbox/lobby_id" to="." method="_on_lobby_id_text_changed"]
+[connection signal="pressed" from="network/vbox/hbox/host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="network/vbox/hbox/join" to="." method="_on_join_pressed"]

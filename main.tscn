@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://maosoyr4pruq"]
 
-[ext_resource type="Script" uid="uid://di3yn3osrnhlt" path="res://scripts/main.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://di3yn3osrnhlt" path="res://scripts/network.gd" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://cdxk0h205dv0p" path="res://scenes/player.tscn" id="2_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://6d6sfkge0mxi" path="res://scenes/computer.tscn" id="3_h2yge"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0xm2m"]
 size = Vector3(64, 1, 64)
@@ -9,7 +10,7 @@ size = Vector3(64, 1, 64)
 [sub_resource type="BoxMesh" id="BoxMesh_0xm2m"]
 size = Vector3(64, 1, 64)
 
-[node name="main" type="Node3D" unique_id=353518620]
+[node name="network" type="Node3D" unique_id=353518620]
 script = ExtResource("1_ig7tw")
 net_mode = "ENet"
 player_scene = ExtResource("2_0xm2m")
@@ -18,14 +19,14 @@ player_scene = ExtResource("2_0xm2m")
 _spawnable_scenes = PackedStringArray("uid://cdxk0h205dv0p")
 spawn_path = NodePath("..")
 
-[node name="cam" type="Camera3D" parent="." unique_id=995007617]
-transform = Transform3D(1, 0, 0, 0, 0.9659259, 0.25881907, 0, -0.25881907, 0.9659258, 0, 6, 18.09313)
+[node name="computer" parent="." unique_id=1376017607 instance=ExtResource("3_h2yge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
 [node name="sun" type="DirectionalLight3D" parent="." unique_id=324549864]
 transform = Transform3D(0.76185495, -0.4340072, 0.48084804, 0, 0.7423385, 0.67002505, -0.6477477, -0.5104619, 0.56555426, 0, 11.049206, 0)
 
 [node name="ground" type="StaticBody3D" parent="." unique_id=1146156176]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 
 [node name="col" type="CollisionShape3D" parent="ground" unique_id=1101970214]
 shape = SubResource("BoxShape3D_0xm2m")
@@ -36,6 +37,7 @@ mesh = SubResource("BoxMesh_0xm2m")
 [node name="canvas" type="CanvasLayer" parent="." unique_id=489997812]
 
 [node name="ui" type="Control" parent="canvas" unique_id=1747108768]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -57,7 +59,6 @@ offset_left = 31.0
 offset_top = 78.0
 offset_right = 93.0
 offset_bottom = 117.0
-disabled = true
 text = "Join"
 
 [node name="refresh" type="Button" parent="canvas/ui" unique_id=682094158]

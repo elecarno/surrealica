@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://6d6sfkge0mxi"]
+
+[ext_resource type="Script" uid="uid://j2h02b1mvyrl" path="res://scripts/computer.gd" id="1_8pqrt"]
+[ext_resource type="PackedScene" uid="uid://hlaijqwl2v13" path="res://scenes/computer_ui.tscn" id="1_om4aa"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_0xm2m"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_0xm2m"]
+viewport_path = NodePath("viewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h2yge"]
+resource_local_to_scene = true
+albedo_texture = SubResource("ViewportTexture_0xm2m")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1bvp3"]
+size = Vector3(1, 1, 0.044921875)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_h2yge"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_h2yge"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xm2m"]
+albedo_color = Color(0.48570347, 0.48570353, 0.4857034, 1)
+
+[node name="computer" type="Node3D" unique_id=1376017607]
+script = ExtResource("1_8pqrt")
+
+[node name="cam" type="Camera3D" parent="." unique_id=505022581]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5061285, 1.6444061)
+fov = 50.0
+
+[node name="display" type="MeshInstance3D" parent="." unique_id=2101881903]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0.5165251)
+mesh = SubResource("QuadMesh_0xm2m")
+surface_material_override/0 = SubResource("StandardMaterial3D_h2yge")
+
+[node name="ui_area" type="Area3D" parent="." unique_id=1185810081]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0.5519028)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ui_area" unique_id=8297145]
+shape = SubResource("BoxShape3D_1bvp3")
+
+[node name="viewport" type="SubViewport" parent="." unique_id=1614833374]
+size = Vector2i(1024, 1024)
+
+[node name="computer_ui" parent="viewport" unique_id=742668510 instance=ExtResource("1_om4aa")]
+
+[node name="monitor" type="StaticBody3D" parent="." unique_id=610927706]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="col" type="CollisionShape3D" parent="monitor" unique_id=549719837]
+shape = SubResource("BoxShape3D_h2yge")
+
+[node name="mesh" type="MeshInstance3D" parent="monitor" unique_id=1075727931]
+mesh = SubResource("BoxMesh_h2yge")
+surface_material_override/0 = SubResource("StandardMaterial3D_0xm2m")
