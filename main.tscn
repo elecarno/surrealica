@@ -1,13 +1,65 @@
 [gd_scene format=3 uid="uid://maosoyr4pruq"]
 
+[ext_resource type="PackedScene" uid="uid://d32a1cai4n3yh" path="res://models/house.blend" id="1_h2yge"]
 [ext_resource type="Script" uid="uid://dwk2jwoqwchdp" path="res://scripts/players_container.gd" id="2_0xm2m"]
+[ext_resource type="Texture2D" uid="uid://b6ufn4rgwod7i" path="res://tex/sbs_tiny_textures/tt2_128/Dirt/Dirt_11-128x128.png" id="2_lquwl"]
 [ext_resource type="PackedScene" uid="uid://6d6sfkge0mxi" path="res://scenes/computer.tscn" id="3_h2yge"]
+[ext_resource type="Texture2D" uid="uid://c6075dc2lqfr3" path="res://icon.svg" id="6_5vw27"]
+[ext_resource type="Shader" uid="uid://cofrh8lo5tg17" path="res://shaders/vhs.gdshader" id="6_7mycd"]
+[ext_resource type="Texture2D" uid="uid://p51xv05jkn8" path="res://tex/sbs_cloudy_skyboxes/Panorama_Sky_17-512x512.png" id="6_272bh"]
+[ext_resource type="Shader" uid="uid://di5ic8hd1bjjw" path="res://shaders/static.gdshader" id="8_5vw27"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0xm2m"]
 size = Vector3(64, 1, 64)
 
 [sub_resource type="BoxMesh" id="BoxMesh_0xm2m"]
 size = Vector3(64, 1, 64)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7mycd"]
+albedo_texture = ExtResource("2_lquwl")
+uv1_scale = Vector3(50, 50, 50)
+texture_filter = 0
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_5vw27"]
+panorama = ExtResource("6_272bh")
+
+[sub_resource type="Sky" id="Sky_kek77"]
+sky_material = SubResource("PanoramaSkyMaterial_5vw27")
+
+[sub_resource type="Environment" id="Environment_4c57u"]
+background_mode = 2
+sky = SubResource("Sky_kek77")
+ambient_light_source = 3
+tonemap_mode = 3
+ssao_enabled = true
+ssil_enabled = true
+glow_enabled = true
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5vw27"]
+frequency = 0.25
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_kek77"]
+width = 1920
+height = 1080
+noise = SubResource("FastNoiseLite_5vw27")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kek77"]
+shader = ExtResource("8_5vw27")
+shader_parameter/noise = SubResource("NoiseTexture2D_kek77")
+shader_parameter/slow = 25.0
+shader_parameter/multiplier = 0.5
+shader_parameter/contrast = 2.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_272bh"]
+shader = ExtResource("6_7mycd")
+shader_parameter/color_levels = 16.000000665
+shader_parameter/chromatic_aberration = 0.0
+shader_parameter/blur_amount = 0.150000007125
+shader_parameter/brightness = 1.20000003325
+shader_parameter/saturation = 1.0
+shader_parameter/color_offset_multiplier = 0.0
+shader_parameter/black_offset_multiplier = 0.0
+shader_parameter/color_offset = 0.005
 
 [node name="main" type="Node3D" unique_id=353518620]
 
@@ -17,7 +69,11 @@ size = Vector3(64, 1, 64)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
 [node name="sun" type="DirectionalLight3D" parent="world" unique_id=324549864]
-transform = Transform3D(0.76185495, -0.4340072, 0.48084804, 0, 0.7423385, 0.67002505, -0.6477477, -0.5104619, 0.56555426, 0, 11.049206, 0)
+transform = Transform3D(0.617489, 3.438248e-08, -0.78657955, 0.78657955, -2.6991298e-08, 0.617489, 0, -1, -4.371139e-08, 0, 11.049206, 0)
+light_color = Color(0.972549, 0.4509804, 0.5294118, 1)
+light_energy = 0.2
+shadow_enabled = true
+sky_mode = 1
 
 [node name="ground" type="StaticBody3D" parent="world" unique_id=1146156176]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
@@ -27,6 +83,17 @@ shape = SubResource("BoxShape3D_0xm2m")
 
 [node name="mesh" type="MeshInstance3D" parent="world/ground" unique_id=1446826610]
 mesh = SubResource("BoxMesh_0xm2m")
+surface_material_override/0 = SubResource("StandardMaterial3D_7mycd")
+
+[node name="house2" parent="world" unique_id=2106679164 instance=ExtResource("1_h2yge")]
+
+[node name="bulb" type="OmniLight3D" parent="world" unique_id=500010538]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.8603468, 0)
+light_color = Color(0.9015733, 0.74100155, 0.60161775, 1)
+shadow_enabled = true
+
+[node name="env" type="WorldEnvironment" parent="." unique_id=1817363847]
+environment = SubResource("Environment_4c57u")
 
 [node name="m_spawner" type="MultiplayerSpawner" parent="." unique_id=1551097229]
 _spawnable_scenes = PackedStringArray("uid://cdxk0h205dv0p")
@@ -34,3 +101,33 @@ spawn_path = NodePath("../players")
 
 [node name="players" type="Node3D" parent="." unique_id=923819023]
 script = ExtResource("2_0xm2m")
+
+[node name="canvas" type="CanvasLayer" parent="." unique_id=1902309282]
+
+[node name="img" type="TextureRect" parent="canvas" unique_id=1113172638]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_5vw27")
+
+[node name="static" type="ColorRect" parent="canvas" unique_id=499238135]
+visible = false
+material = SubResource("ShaderMaterial_kek77")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="vhs" type="ColorRect" parent="canvas" unique_id=1159191649]
+material = SubResource("ShaderMaterial_272bh")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

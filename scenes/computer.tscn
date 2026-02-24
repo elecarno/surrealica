@@ -31,7 +31,7 @@ script = ExtResource("1_8pqrt")
 
 [node name="cam" type="Camera3D" parent="." unique_id=505022581]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5061285, 1.6444061)
-fov = 50.0
+fov = 40.0
 
 [node name="display" type="MeshInstance3D" parent="." unique_id=2101881903]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0.5165251)

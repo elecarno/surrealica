@@ -66,15 +66,17 @@ func _input(event: InputEvent) -> void:
 			
 			
 func run_command(cmd: String):
+	cli.text += "\n"
 	match cmd:
 		"help":
 			cli.text += (
-				"\n"
-				+ "\nplayers : show a list of all players currently connected to the world"
+				"\nplayers : show a list of all players currently connected to the world"
 			)
 		"players":
 			pass
+		"ping":
+			cli.text += "\npong"
 		_:
-			cli.text += "\n\nunknown command, use \"help\" to see a list of all commands"
+			cli.text += "\nunknown command, use \"help\" to see a list of all commands"
 			
 	
